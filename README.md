@@ -1,1 +1,1 @@
-# java-script-projects
+# Finance Bot
