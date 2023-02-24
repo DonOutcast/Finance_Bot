@@ -9,11 +9,10 @@ class SqlErrorsDecorator:
 
     def __call__(self, *args, **kwargs):
         try:
-            result = self.func(self, *args, **kwargs)
+            result = self.func(*args, **kwargs)
             return result
         except sql_errors:
             print("Ошибка при работе с базами данных", sql_errors)
-            return self.func
 
 
 def my_decorator(func):

@@ -56,22 +56,19 @@ def logger(statement):
 
 
 import sys
-
-
 def my_decorator(func=None, *, handle=sys.stdout):
     if func is None:
-        return lambda func: my_decorator(func, handle=handle)
+        return lambda func: my_decorator(func, handle=h)
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         return result
-
     return wrapper
 
-
-@my_decorator(handle="file.txt")
+@my_decorator("file.txt")
 def x_and_y(x: int, y: int) -> int:
+    """Hello, world!"""
     print(x + y)
 
 
