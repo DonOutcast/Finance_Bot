@@ -1,5 +1,6 @@
 import sqlite3
 import functools
+from exception import SqlErrorsDecorator, my_decorator
 
 
 class Database:
@@ -8,12 +9,14 @@ class Database:
         self.path_to_db = path_to_db
 
     @property
-    def _connection(self):
+    def connection(self):
         return sqlite3.connect(self.path_to_db)
 
-    def execute(self, sql: str, parameters: tuple = None, fetchone=False,
-                fetchall=False, commit=False):
-        connection = self._connection
+    @SqlErrorsDecorator
+    # @my_decorator
+    def _execute(self, sql: str, parameters: tuple = (), fetchone=False,
+                 fetchall=False, commit=False):
+        connection = self.connection
         connection.set_trace_callback(logger)
         cursor = connection.cursor()
         cursor.execute(sql, parameters)
@@ -36,46 +39,44 @@ class Database:
         )
         return sql, tuple(parameters)
 
+    def crete_table_users(self):
+        sql_query = """
+        CREATE TABLE IF NOT EXISTS Userts (
+        id int NOT NULL,
+        Name varchar(255) NOT NULL,
+        PRIMARY KEY(id)
+        );
+        """
+        print(type(self._execute))
+        self._execute(sql=sql_query, commit=True)
+
 
 def logger(statement):
     print(f"""{statement}""")
 
 
-def my_decorator(func):
+import sys
+
+
+def my_decorator(func=None, *, handle=sys.stdout):
+    if func is None:
+        return lambda func: my_decorator(func, handle=handle)
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        try:
-            result = func(*args, **kwargs)
-            return result
-        except ZeroDivisionError:
-            print("Деленине на ноль бро!")
+        result = func(*args, **kwargs)
+        return result
 
     return wrapper
 
 
-class MyDecorator:
-    def __init__(self, func):
-        functools.update_wrapper(self, func)
-        self.func = func
-
-    def __call__(self, *args, **kwargs):
-        try:
-            result = self.func(*args, **kwargs)
-            return result
-        except ZeroDivisionError:
-            print("Бро тут на 0 нельзя же делить!")
-        return
-
-
-@MyDecorator
-def summa(x, y):
-    return x / y
+@my_decorator(handle="file.txt")
+def x_and_y(x: int, y: int) -> int:
+    print(x + y)
 
 
 if __name__ == "__main__":
-    sqlite_connection = sqlite3.connect("d")
-    cursor = sqlite_connection.cursor()
-    cursor.execute("SELECT sqlite_version();")
-    print(cursor.fetchone())
-    cursor.close()
-
+    # print(x_and_y.__name__)
+    # print(x_and_y.__doc__)
+    # print(x_and_y.__module__)
+    x_and_y(2, 2)
