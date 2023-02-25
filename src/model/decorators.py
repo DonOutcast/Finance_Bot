@@ -2,24 +2,36 @@ import os
 import sys
 import types
 import typing
-
 import functools
 import logging
 
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(message)s",
-    filename='example.log',
-    encoding='utf-8',
-    datefmt="%Y-%m-%d %H:%M:%S",
-    level=logging.DEBUG
-)
-logger = logging.getLogger("Shamil")
+
+
+class Logger:
+
+    def __init__(self, name: str, filename: str):
+        self.name = name
+        self.filename = filename
+        self.logger = None
+
+    def __configurate_logger(self):
+        self.logger = logging.getLogger(self.name)
+        self.logger.setLevel(logging.DEBUG)
+        file_handler = logging.FileHandler(self.filename, "a", "utf-8")
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messsage)s")
+        file_handler.setFormatter(formatter)
+        self.logger.addHandler(file_handler)
+
+    def get_logger(self):
+        self.__configurate_logger()
+        return self.logger
 
 
 def decorator(message):
     def wrapper(func):
         def inner(*args, **kwargs):
-            logger.debug(f"Function name: {func.__name__}, function called {func.__module__}")
+            logger = Logger("shamil", "info.log")
+            logger.info(f"Function name: {func.__name__}, function called {func.__module__}")
             result = func(*args, **kwargs)
             return result
 
