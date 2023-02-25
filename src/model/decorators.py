@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import types
 import typing
 import functools
@@ -44,6 +45,7 @@ log_config = {
         }
     }
 }
+
 
 
 class Logger:
@@ -112,8 +114,12 @@ def post(condition: typing.Callable, message: str):
 
 
 if __name__ == "__main__":
-    logging.config.dictConfig(log_config)
-    log = logging.getLogger("primes")
-    log.debug("Hello")
-    log_1 = logging.getLogger("main")
-    log_1.info("World")
+    # logging.config.dictConfig(log_config)
+    # log = logging.getLogger("primes")
+    # log.debug("Hello")
+    # log_1 = logging.getLogger("main")
+    # log_1.info("World")
+    with open('../configurate/log_config.json') as f:
+        data = json.load(f)
+
+    print(data)
