@@ -4,7 +4,46 @@ import types
 import typing
 import functools
 import logging
+import logging.config
 
+log_config = {
+    "version": 1,
+    "formatters": {
+        "primes_formatter": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S"
+        },
+        "main_formatter": {
+            "format": "%(asctime)s - %(message)s",
+            "datefmt": "%d/%m/%Y"
+
+        },
+    },
+    "handlers": {
+        "primes_handler": {
+            "class": "logging.FileHandler",
+            "formatter": "primes_formatter",
+            "filename": "primes.log",
+            "encoding": "UTF-8"
+        },
+        "main_handler": {
+            "class": "logging.FileHandler",
+            "formatter": "main_formatter",
+            "filename": "main.log",
+            "encoding": "UTF-8",
+        },
+    },
+    "loggers": {
+        "primes": {
+            "handlers": ["primes_handler"],
+            "level": "DEBUG",
+        },
+        "main": {
+            "handlers": ["main_handler"],
+            "level": "INFO",
+        }
+    }
+}
 
 
 class Logger:
@@ -27,17 +66,17 @@ class Logger:
         return self.logger
 
 
-def decorator(message):
-    def wrapper(func):
-        def inner(*args, **kwargs):
-            logger = Logger("shamil", "info.log")
-            logger.info(f"Function name: {func.__name__}, function called {func.__module__}")
-            result = func(*args, **kwargs)
-            return result
-
-        return inner
-
-    return wrapper
+# def decorator(message):
+#     def wrapper(func):
+#         def inner(*args, **kwargs):
+#             logger = Logger("shamil", "info.log")
+#             logger.info(f"Function name: {func.__name__}, function called {func.__module__}")
+#             result = func(*args, **kwargs)
+#             return result
+#
+#         return inner
+#
+#     return wrapper
 
 
 def pre(condition: typing.Callable, message: str):
@@ -67,10 +106,14 @@ def post(condition: typing.Callable, message: str):
 
 
 # @pre(lambda x: x >= 0, "negative")
-@decorator("Hello world")
-def checked_log(x):
-    return x
+# @decorator("Hello world")
+# def checked_log(x):
+#     return x
 
 
 if __name__ == "__main__":
-    checked_log(1)
+    logging.config.dictConfig(log_config)
+    log = logging.getLogger("primes")
+    log.debug("Hello")
+    log_1 = logging.getLogger("main")
+    log_1.info("World")
