@@ -1,1 +1,4 @@
-# java-script-projects
+# Finance Bot
+````
+python3.10
+````
