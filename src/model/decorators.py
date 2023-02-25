@@ -2,11 +2,10 @@ import os
 import sys
 import json
 import types
-import typing
 import functools
 import logging
 import logging.config
-
+from typing import Callable
 log_config = {
     "version": 1,
     "formatters": {
@@ -47,7 +46,6 @@ log_config = {
 }
 
 
-
 class Logger:
 
     def __init__(self, name: str, filename: str):
@@ -81,7 +79,7 @@ class Logger:
 #     return wrapper
 
 
-def pre(condition: typing.Callable, message: str):
+def pre(condition: Callable, message: str):
     def wrapper(func):
         @functools.wraps(func)
         def inner(*args, **kwargs):
@@ -94,7 +92,7 @@ def pre(condition: typing.Callable, message: str):
     return wrapper
 
 
-def post(condition: typing.Callable, message: str):
+def post(condition: Callable, message: str):
     def wrapper(func):
         @functools.wraps(func)
         def inner(*args, **kwargs):
@@ -112,14 +110,18 @@ def post(condition: typing.Callable, message: str):
 # def checked_log(x):
 #     return x
 
+from typing import TypeAlias
+
+Json: TypeAlias = dict
+
+
+def some_function(data: Json):
+    print(data)
+
 
 if __name__ == "__main__":
-    # logging.config.dictConfig(log_config)
-    # log = logging.getLogger("primes")
-    # log.debug("Hello")
-    # log_1 = logging.getLogger("main")
-    # log_1.info("World")
     with open('../configurate/log_config.json') as f:
         data = json.load(f)
+    some_function(data)
 
-    print(data)
+
