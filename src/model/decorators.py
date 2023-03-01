@@ -120,8 +120,16 @@ def some_function(data: Json):
 
 
 if __name__ == "__main__":
-    with open('../configurate/log_config.json') as f:
-        data = json.load(f)
-    some_function(data)
+    def get_logger(path_to_file) -> Logger:
+        path_to_file = os.path.abspath(path_to_file)
+        print(path_to_file)
+        with open(path_to_file) as f:
+            data_config = json.load(f)
+        print(data_config)
+        logging.config.dictConfig(data_config)
+        return logging.getLogger("main")
+
+    get_logger("../configurate/log_config.json")
+
 
 
