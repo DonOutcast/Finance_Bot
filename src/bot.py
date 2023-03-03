@@ -1,5 +1,6 @@
-import aiogram
 import asyncio
+from model.templates import render_template
+from aiogram.filters.command import Command
 from aiogram import Bot, Dispatcher, F
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
@@ -11,9 +12,9 @@ dp = Dispatcher()
 dp.message.filter(F.chat.type == "private")
 
 
-@dp.message(aiogram.filters.command.Command("start"))
+@dp.message(Command("start"))
 async def cmd_start(message: Message):
-    await bot.send_message(message.from_user.id, "Hello")
+    await bot.send_message(message.from_user.id, text=render_template("help.j2"))
 
 
 async def main():
@@ -21,6 +22,9 @@ async def main():
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
         await bot.session.close()
+
+
+
 
 
 if __name__ == "__main__":

@@ -30,3 +30,7 @@ def _get_template_env():
         _get_template_env.template_env = env
 
     return _get_template_env.template_env
+
+
+if __name__ == "__main__":
+    print(render_template("help.j2"))
