@@ -10,7 +10,7 @@ from configurate.config import TELEGRAM_BOT_TOKEN
 
 
 render = RenderTemplate()
-
+print("This conf", config)
 bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
 dp = Dispatcher()
@@ -19,7 +19,7 @@ dp.message.filter(F.chat.type == "private")
 
 @dp.message(Command("start"))
 async def cmd_start(message: Message):
-    await bot.send_message(message.from_user.id, text=render.render_template("help.html"))
+    await bot.send_message(message.from_user.id, text=message.json())
 
 
 @dp.message(Command("help"))
