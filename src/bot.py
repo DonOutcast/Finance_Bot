@@ -1,5 +1,6 @@
 import asyncio
 # from model.templates import render_template
+from configurate.config import config
 from model.templates import RenderTemplate
 from aiogram.filters.command import Command
 from aiogram import Bot, Dispatcher, F
@@ -7,11 +8,13 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
 from configurate.config import TELEGRAM_BOT_TOKEN
 
-bot = Bot(TELEGRAM_BOT_TOKEN, parse_mode="HTML")
+
+render = RenderTemplate()
+
+bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
 dp = Dispatcher()
 dp.message.filter(F.chat.type == "private")
-render = RenderTemplate()
 
 
 @dp.message(Command("start"))

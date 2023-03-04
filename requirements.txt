@@ -1,3 +1,5 @@
 --pre
 aiogram==3.0.0b7
 python-dotenv==0.21.1
+Jinja2~=3.1.2
+pydantic~=1.10.5
