@@ -13,9 +13,15 @@ dp = Dispatcher()
 dp.message.filter(F.chat.type == "private")
 render = RenderTemplate()
 
+
 @dp.message(Command("start"))
 async def cmd_start(message: Message):
-    await bot.send_message(message.from_user.id, text=render.render_template("help.j2"))
+    await bot.send_message(message.from_user.id, text=render.render_template("help.html"))
+
+
+@dp.message(Command("help"))
+async def cmd_help(message: Message):
+    await bot.send_message(message.from_user.id, text=render.render_template("index.html"))
 
 
 async def main():
@@ -23,9 +29,6 @@ async def main():
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
         await bot.session.close()
-
-
-
 
 
 if __name__ == "__main__":
