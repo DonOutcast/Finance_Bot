@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     image: str = Field(..., env="BOT_IMAGE_NAME")
 
     fsm_mode: str
+
     redis_user: str = Field(..., env="REDIS_DATABASE_USER")
     redis_pass: str = Field(..., env="REDIS_DATABASE_PASSWORD")
     redis_host: str = Field(..., env="REDIS_DATABASE_HOST")
@@ -46,10 +47,12 @@ class Settings(BaseSettings):
     database_mode: str
     postgres_user: str = Field(..., env="POSTGRES_DATABASE_USER")
     postgres_pass: str = Field(..., env="POSTGRES_DATABASE_PASSWORD")
-    postgres_db: str = Field(...,  env="POSTGRES_DATABASE_NAME")
+    postgres_db: str = Field(..., env="POSTGRES_DATABASE_NAME")
     postgres_host: str = Field(..., env="POSTGRES_DATABASE_HOST")
     postgres_port: str = Field(..., env="POSTGRES_DATABASE_PORT")
     postgres_dsn: Optional[PostgresDsn]
+
+    debug: bool
 
     @validator("fsm_mode")
     def check_fsm_mode(cls, value):
@@ -74,6 +77,13 @@ class Settings(BaseSettings):
             raise ValueError("PostgreSql config is missing, though database_type is 'postgresql'")
         return value
 
+    @validator("admins")
+    def check_correct_admins_ids(cls, value):
+        print(value)
+        for i in value:
+            if i < 0:
+                raise ValueError("Incorrect admins ids. Must be only positive numbers.")
+
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'
@@ -86,4 +96,4 @@ def get_settings() -> Settings:
 
 config = get_settings()
 if __name__ == "__main__":
-    print(config)
+    print(config.debug)
