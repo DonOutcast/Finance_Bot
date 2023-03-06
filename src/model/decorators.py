@@ -6,6 +6,7 @@ import functools
 import logging
 import logging.config
 from typing import Callable
+
 log_config = {
     "version": 1,
     "formatters": {
@@ -120,16 +121,39 @@ def some_function(data: Json):
 
 
 if __name__ == "__main__":
-    def get_logger(path_to_file) -> Logger:
-        path_to_file = os.path.abspath(path_to_file)
-        print(path_to_file)
-        with open(path_to_file) as f:
-            data_config = json.load(f)
-        print(data_config)
-        logging.config.dictConfig(data_config)
-        return logging.getLogger("main")
+    # def get_logger(path_to_file) -> Logger:
+    #     path_to_file = os.path.abspath(path_to_file)
+    #     print(path_to_file)
+    #     with open(path_to_file) as f:
+    #         data_config = json.load(f)
+    #     print(data_config)
+    #     logging.config.dictConfig(data_config)
+    #     return logging.getLogger("main")
+    #
+    # get_logger("../configurate/log_config.json")
+    def debugorator(flag: bool):
+        def decorator(func: Callable):
 
-    get_logger("../configurate/log_config.json")
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                result = func(*args, **kwargs)
+                if flag:
+                    logger = logging.getLogger()
+                    logger.setLevel("DEBUG")
+                    logger.debug(f"Function call {func.__name__}")
+                    logger.info("Hello")
+                    logger.warning("Sa")
+                return result
+
+            return wrapper
+
+        return decorator
 
 
+    @debugorator(True)
+    def say_hello(name):
+        print("Hello {}".format(name))
 
+
+    #
+    say_hello("Shamil")

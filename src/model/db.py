@@ -39,16 +39,16 @@ class Database:
         )
         return sql, tuple(parameters)
 
-    def crete_table_users(self):
-        sql_query = """
-        CREATE TABLE IF NOT EXISTS Userts (
-        id int NOT NULL,
-        Name varchar(255) NOT NULL,
-        PRIMARY KEY(id)
-        );
-        """
-        print(type(self._execute))
-        self._execute(sql=sql_query, commit=True)
+    # def crete_table_users(self):
+    #     sql_query = """
+    #     CREATE TABLE IF NOT EXISTS Userts (
+    #     id int NOT NULL,
+    #     Name varchar(255) NOT NULL,
+    #     PRIMARY KEY(id)
+    #     );
+    #     """
+    #     print(type(self._execute))
+    #     self._execute(sql=sql_query, commit=True)
 
 
 def logger(statement):
