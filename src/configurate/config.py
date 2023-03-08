@@ -16,6 +16,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 BASE_DIR = Path(__file__).absolute().parent.parent
 # SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
 TEMPLATES_DIR = BASE_DIR / "templates"
+CONFIGURATE_DIR = BASE_DIR / "configurate/log_config.json"
 
 
 # DATE_FORMAT = "%d.%m.%Y"
@@ -79,7 +80,6 @@ class Settings(BaseSettings):
 
     @validator("admins")
     def check_correct_admins_ids(cls, value):
-        print(value)
         for i in value:
             if i < 0:
                 raise ValueError("Incorrect admins ids. Must be only positive numbers.")
@@ -105,12 +105,9 @@ def debug(func):
         args_repr = [repr(a) for a in args]                      # 1
         kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]  # 2
         signature = ", ".join(args_repr + kwargs_repr)           # 3
-        print(f"Calling {func.__name__}({signature})")
+
         value = func(*args, **kwargs)
-        print(f"{func.__name__!r} returned {value!r}")           # 4
         return value
     return wrapper_debug
 
 
-if __name__ == "__main__":
-    print(config.debug)

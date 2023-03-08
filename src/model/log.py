@@ -1,41 +1,37 @@
+import json
 import logging
 import logging.config
 
-log_config = {
-    "version": 1,
-    "formatters": {
-        "my_formatter": {
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        },
-    },
-    "handlers": {
-        "file_handler": {
-            "class": "logging.FileHandler",
-            "formatter": "my_formatter",
-            "filename": "perky.log"
-        },
-    },
-    "loggers": {
-        "perky": {
-            "handlers": ["file_handler"],
-            "level": "INFO",
-        }
-    },
-}
+
+class LoggerCore:
+
+    def __init__(self, path_to_file: str):
+        self.path = path_to_file
+        self._set_configurate()
+
+    def _get_configurate_logging(self) -> json:
+        with open(self.path) as file:
+            data = json.load(file)
+        return data
+
+    def _set_configurate(self) -> None:
+        logging.config.dictConfig(self._get_configurate_logging())
 
 
-logging.config.dictConfig(log_config)
-log = logging.getLogger('perky')
+def get_my_logger(name: str) -> logging:
+    return logging.getLogger(name)
 
 
-def perky(param):
-    return param / 0
+def debugorator(debug_on: bool):
+    def decorator(function):
+        async def wrapper(*args, **kwargs):
+            result = await function(*args, **kwargs)
+            if debug_on:
+                logger_debug = get_my_logger("primes")
+                print("I am here")
+                logger_debug.debug(f"Function {function.__name__} {args[0].username}")
+            return result
 
+        return wrapper
 
-number = 42
-try:
-    log.info('Посмотрим как у него получится...')
-    perky(number)
-    log.info('Он смог!')
-except Exception:
-    log.exception(f'Дерзкий не справился c {number}')
+    return decorator
