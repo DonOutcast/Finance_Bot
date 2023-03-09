@@ -29,6 +29,4 @@ class RenderTemplate:
             lstrip_blocks=True,
             autoescape=True,
         )
-
         return env
-

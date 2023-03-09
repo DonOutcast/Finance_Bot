@@ -1,5 +1,5 @@
 import asyncio
-import logging.config
+from model.handlers.echo import echo_router
 from src.model.log import LoggerCore, debugorator, get_my_logger
 # from model.templates import render_template
 from configurate.config import config
@@ -32,12 +32,12 @@ async def cmd_help(message: Message):
 async def main():
     dp = Dispatcher()
     dp.message.filter(F.chat.type == "private")
-    dp.include_router(user_router)
+    for router in [user_router, echo_router]:
+        dp.include_router(router)
     try:
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
         await bot.session.close()
-
 
 if __name__ == "__main__":
     asyncio.run(main())
