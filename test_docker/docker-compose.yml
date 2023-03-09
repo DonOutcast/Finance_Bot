@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+    db:
+        build: ./database/
+        container_name: postgresql_database
+        restart: "unless-stopped"
+        ports:
+          - 5432:5432
+    redis_db:
+        build: ./redis/
+        restart: "unless-stopped"
+        ports:
+          - 6379:6379
+    app:
+        build: ./app
+        container_name: start_main
+        restart: "unless-stopped"
+        depends_on:
+          - db
+          - redis_db
