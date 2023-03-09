@@ -1,6 +1,6 @@
 import asyncio
 import logging.config
-from src.model.log import LoggerCore, debugorator
+from src.model.log import LoggerCore, debugorator, get_my_logger
 # from model.templates import render_template
 from configurate.config import config
 from model.templates import RenderTemplate
@@ -12,18 +12,16 @@ from aiogram.types import Message
 from configurate.config import TELEGRAM_BOT_TOKEN, CONFIGURATE_DIR
 
 render = RenderTemplate()
-print("This conf", config)
 bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
 
 user_router = Router()
-temp = LoggerCore(CONFIGURATE_DIR)
 
 
-@debugorator(True)
 @user_router.message(Command("start"))
+@debugorator(True)
 async def cmd_start(message: Message):
-    await bot.send_message(message.from_user.id, text=message.json())
+    await bot.send_message(message.from_user.id, text="Команда '/start'")
 
 
 @user_router.message(Command("help"))
