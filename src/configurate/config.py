@@ -96,24 +96,6 @@ def get_settings() -> Settings:
 
 config = get_settings()
 
-import functools
-
-
-def debug(func):
-    """Print the function signature and return value"""
-
-    @functools.wraps(func)
-    def wrapper_debug(*args, **kwargs):
-        args_repr = [repr(a) for a in args]  # 1
-        kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]  # 2
-        signature = ", ".join(args_repr + kwargs_repr)  # 3
-
-        value = func(*args, **kwargs)
-        return value
-
-    return wrapper_debug
-
-
 LOGGING = {
     "version": 1,
     "formatters": {
@@ -141,15 +123,15 @@ LOGGING = {
     "loggers": {
         "logger_debug": {
             "handlers": [
-                "info_handler"
-            ],
-            "level": "INFO"
-        },
-        "logger_info": {
-            "handlers": [
                 "debug_handler"
             ],
             "level": "DEBUG"
+        },
+        "logger_info": {
+            "handlers": [
+                "info_handler"
+            ],
+            "level": "INFO"
         }
     }
 }

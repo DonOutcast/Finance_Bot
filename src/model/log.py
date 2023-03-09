@@ -30,6 +30,7 @@ def debugorator(debug_on: bool):
                 f"Function: {function.__name__}. User id: {args[0].from_user.id}. User name {args[0].from_user.full_name}."
             )
             if debug_on:
+                print("De")
                 logger_debug = get_my_logger("logger_debug")
                 logger_debug.debug(
                     f"Function: {function.__name__}. User id: {args[0].from_user.id}. User name {args[0].from_user.full_name}."

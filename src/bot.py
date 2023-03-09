@@ -14,12 +14,12 @@ from configurate.config import TELEGRAM_BOT_TOKEN, CONFIGURATE_DIR
 render = RenderTemplate()
 bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
-
+print(config.debug)
 user_router = Router()
 
 
 @user_router.message(Command("start"))
-@debugorator(True)
+@debugorator(config.debug)
 async def cmd_start(message: Message):
     await bot.send_message(message.from_user.id, text="Команда '/start'")
 
