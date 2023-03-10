@@ -1,16 +1,17 @@
 import re
 import jinja2
-from src.configurate import config
+from configurate import config
 
 
 class RenderTemplate:
 
-    def __init__(self):
-        tags = {
-            "{FOURSPACE}": "    "
-        }
+    # def __init__(self):
+    #     tags = {
+    #         "{FOURSPACE}": "    "
+    #     }
 
     def render_template(self, template_name: str, data: dict | None = None) -> str:
+        print(template_name, data)
         if data is None:
             data = {}
         template = self.__get_template_env().get_template(template_name)

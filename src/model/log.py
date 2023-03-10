@@ -3,7 +3,7 @@ import logging
 import functools
 import logging.config
 
-from src.configurate.config import CONFIGURATE_DIR, LOGGING
+from configurate.config import CONFIGURATE_DIR, LOGGING
 
 
 class LoggerCore:

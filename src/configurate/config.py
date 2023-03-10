@@ -83,6 +83,7 @@ class Settings(BaseSettings):
         for i in value:
             if i < 0:
                 raise ValueError("Incorrect admins ids. Must be only positive numbers.")
+        return value
 
     class Config:
         env_file = '.env'
