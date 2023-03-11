@@ -4,7 +4,7 @@ from model.handlers.admin import admin_router
 from model.handlers.user import user_router
 from model.log import LoggerCore, debugorator, get_my_logger
 # from model.templates import render_template
-from configurate.config import config
+from configurate.config import settings, Settings
 from model.templates import RenderTemplate
 from aiogram.filters.command import Command
 from aiogram import Router
@@ -12,9 +12,11 @@ from aiogram import Bot, Dispatcher, F
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
 from configurate.config import TELEGRAM_BOT_TOKEN, CONFIGURATE_DIR
+from model.middlewares.config import ConfigMiddleware
+from model.middlewares.throttling import ThrottlingMiddelware
+from model.middlewares.chataction import ChatActionMiddleware
 
-
-bot = Bot(config.bot_token.get_secret_value(), parse_mode="HTML")
+bot = Bot(settings.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
 
 
@@ -29,17 +31,31 @@ storage = MemoryStorage
 #     await bot.send_message(message.from_user.id, text=render.render_template("index.html"))
 
 
+# @r.message(Command("help"))
+# async def cmd_help(message: Message):
+#     await bot.send_message(chat_id=1134902789, text="Оставь да")
+
+def register_global_middlewares(dp: Dispatcher, settings: Settings) -> None:
+    dp.message.outer_middleware(ConfigMiddleware(settings))
+    # dp.message.outer_middleware(ThrottlingMiddelware())
+    dp.message.middleware(ChatActionMiddleware())
+
+
+
 async def main():
     dp = Dispatcher()
-    dp.message.filter(F.chat.type == "private")
-    for router in [admin_router]:
+    # dp.message.filter(F.chat.type == "private")
+    for router in [admin_router, user_router, echo_router]:
         dp.include_router(router)
+    register_global_middlewares(dp, settings)
     try:
         print("run!")
-        print(type(config.admins[0]), config.admins[0])
+        # await bot.send_message(chat_id=1134902789, text="Оставь да", disable_notification=False)
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
         await bot.session.close()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

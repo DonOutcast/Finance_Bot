@@ -6,9 +6,9 @@ from model.templates import RenderTemplate
 
 render = RenderTemplate()
 echo_router = Router()
-
-
-@echo_router.message(F.text)
+# echo_router.message(flags={"long_operation": "upload_video_note"})
+# echo_router.message.middleware()
+@echo_router.message(F.text, flags={"long_operation": "upload_video_note"})
 async def bot_echo(message: types.Message):
     await message.answer(text=render.render_template("echo.html", {"message": message.text}))
     await message.answer(text=render.render_template("user.html"))

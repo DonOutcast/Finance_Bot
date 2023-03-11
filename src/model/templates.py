@@ -11,7 +11,6 @@ class RenderTemplate:
     #     }
 
     def render_template(self, template_name: str, data: dict | None = None) -> str:
-        print(template_name, data)
         if data is None:
             data = {}
         template = self.__get_template_env().get_template(template_name)

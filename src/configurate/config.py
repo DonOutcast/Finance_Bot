@@ -95,7 +95,7 @@ def get_settings() -> Settings:
     return Settings()
 
 
-config = get_settings()
+settings = get_settings()
 
 LOGGING = {
     "version": 1,
