@@ -1,12 +1,9 @@
-from aiogram import F
 from aiogram import Router
 from aiogram.filters import CommandStart
-from aiogram.fsm.state import State
 from aiogram.types import Message
 
 from model.filters.admin import AdminFilter
-from model.templates import RenderTemplate
-from aiogram import flags
+from model.template.templates import RenderTemplate
 
 render = RenderTemplate()
 

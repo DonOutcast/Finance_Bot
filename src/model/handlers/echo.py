@@ -2,7 +2,7 @@ from aiogram import types, F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hcode
 
-from model.templates import RenderTemplate
+from model.template.templates import RenderTemplate
 
 render = RenderTemplate()
 echo_router = Router()

@@ -30,3 +30,5 @@ class RenderTemplate:
             autoescape=True,
         )
         return env
+
+render = RenderTemplate()

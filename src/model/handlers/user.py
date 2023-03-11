@@ -2,9 +2,9 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from model.templates import RenderTemplate
+from model.template.templates import render
 
-render = RenderTemplate()
+
 user_router = Router()
 
 
