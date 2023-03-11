@@ -11,10 +11,13 @@ from aiogram import Router
 from aiogram import Bot, Dispatcher, F
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
+from aiogram import exceptions
+
 from configurate.config import TELEGRAM_BOT_TOKEN, CONFIGURATE_DIR
 from model.middlewares.config import ConfigMiddleware
 from model.middlewares.throttling import ThrottlingMiddelware
 from model.middlewares.chataction import ChatActionMiddleware
+from model.services import broadcaster
 
 bot = Bot(settings.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
@@ -41,6 +44,9 @@ def register_global_middlewares(dp: Dispatcher, settings: Settings) -> None:
     dp.message.middleware(ChatActionMiddleware())
 
 
+async def on_startup(bot: Bot, admin_ids: list[int]):
+    await broadcaster.broadcast(bot, admin_ids, "Бот запущен!")
+
 
 async def main():
     dp = Dispatcher()
@@ -51,8 +57,11 @@ async def main():
     try:
         print("run!")
         # await bot.send_message(chat_id=1134902789, text="Оставь да", disable_notification=False)
+        await on_startup(bot, settings.admins)
         await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    except exceptions as ex:
+        print(ex)
     finally:
         await bot.session.close()
 
