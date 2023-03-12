@@ -17,7 +17,7 @@ from model.services import broadcaster
 
 
 # from model.handlers.echo import echo_router
-class Singleton(object):
+class Controller(object):
     __instance = None
     bot = Bot(settings.bot_token.get_secret_value(), parse_mode="HTML")
     storage = MemoryStorage
@@ -25,7 +25,7 @@ class Singleton(object):
 
     def __new__(cls):
         if cls.__instance is None:
-            cls.__instance = super(Singleton, cls).__new__(cls)
+            cls.__instance = super(Controller, cls).__new__(cls)
             cls.__instance.__initialized = False
         return cls.__instance
 

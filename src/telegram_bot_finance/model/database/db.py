@@ -1,6 +1,5 @@
 import sqlite3
-import functools
-from exception import SqlErrorsDecorator, my_decorator
+from model.errors.exception import SqlErrorsDecorator
 
 
 class Database:
@@ -17,7 +16,6 @@ class Database:
     def _execute(self, sql: str, parameters: tuple = (), fetchone=False,
                  fetchall=False, commit=False):
         connection = self.connection
-        connection.set_trace_callback(logger)
         cursor = connection.cursor()
         cursor.execute(sql, parameters)
         data = None
@@ -50,30 +48,3 @@ class Database:
     #     print(type(self._execute))
     #     self._execute(sql=sql_query, commit=True)
 
-
-def logger(statement):
-    print(f"""{statement}""")
-
-
-import sys
-def my_decorator(func=None, *, handle=sys.stdout):
-    if func is None:
-        return lambda func: my_decorator(func, handle=h)
-
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        result = func(*args, **kwargs)
-        return result
-    return wrapper
-
-@my_decorator("file.txt")
-def x_and_y(x: int, y: int) -> int:
-    """Hello, world!"""
-    print(x + y)
-
-
-if __name__ == "__main__":
-    # print(x_and_y.__name__)
-    # print(x_and_y.__doc__)
-    # print(x_and_y.__module__)
-    x_and_y(2, 2)

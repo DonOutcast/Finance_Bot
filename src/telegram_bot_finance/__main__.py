@@ -1,6 +1,6 @@
-from controller.controller import Singleton
+from controller.controller import Controller
 import asyncio
 
 if __name__ == "__main__":
-    s = Singleton()
+    s = Controller()
     asyncio.run(s.main())
