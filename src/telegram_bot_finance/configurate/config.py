@@ -115,10 +115,12 @@ LOGGING = {
             "formatter": "primes_formatter"
         },
         "info_handler": {
-            "class": "logging.FileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "formatter": "main_formatter",
             "filename": "log/logs.log",
-            "encoding": "UTF-8"
+            "encoding": "UTF-8",
+            "maxBytes": "20",
+            "backupCount": "5",
         }
     },
     "loggers": {
