@@ -3,12 +3,16 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.markdown import hcode
 
 from model.template.templates import RenderTemplate
+from model.log import debugorator
 
 render = RenderTemplate()
 echo_router = Router()
+
+
 # echo_router.message(flags={"long_operation": "upload_video_note"})
 # echo_router.message.middleware()
 @echo_router.message(F.text, flags={"long_operation": "upload_video_note"})
+@debugorator(True)
 async def bot_echo(message: types.Message):
     await message.answer(text=render.render_template("echo.html", {"message": message.text}))
     await message.answer(text=render.render_template("user.html"))

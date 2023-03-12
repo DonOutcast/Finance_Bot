@@ -1,9 +1,9 @@
-# from controller.controller import Controller
-# import asyncio
+from controller.controller import Controller
+import asyncio
 
-# if __name__ == "__main__":
-#     s = Controller()
-#     asyncio.run(s.main())
+if __name__ == "__main__":
+    s = Controller()
+    asyncio.run(s.main())
 
 # import time
 # import logging
@@ -38,5 +38,5 @@
 # finally:
 #     # perform an orderly shutdown by flushing and closing all handlers; called at application exit and no further use of the logging system should be made after this call.
 #     logging.shutdown()
-from model.log import debugorator
+
 

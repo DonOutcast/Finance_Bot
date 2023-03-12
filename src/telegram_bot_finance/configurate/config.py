@@ -116,11 +116,12 @@ LOGGING = {
         },
         "info_handler": {
             "class": "logging.handlers.RotatingFileHandler",
-            "formatter": "main_formatter",
+            "mode": "a",
             "filename": "log/logs.log",
             "encoding": "UTF-8",
-            "maxBytes": "20",
-            "backupCount": "5",
+            "maxBytes": 20,
+            "backupCount": 5,
+            "formatter": "main_formatter",
         }
     },
     "loggers": {
@@ -134,6 +135,7 @@ LOGGING = {
             "handlers": [
                 "info_handler"
             ],
+            "propagate": True,
             "level": "INFO"
         }
     }
