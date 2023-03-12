@@ -1,0 +1,60 @@
+# Bot settings
+## Token (required). Get it from @BotFather
+BOT_TOKEN=bot_token
+## Bot name at telegram
+BOT_NAME=mybotname
+## Admins id
+ADMINS=[1134902789, 1]
+
+# Docker Compose settings
+## Container name
+BOT_CONTAINER_NAME=bot_container_name
+## Containe image name
+BOT_IMAGE_NAME=botimage_name
+
+# Finite State Machine
+## FSM Storage for game data. Values allowed: memory, redis
+FSM_MODE=memory
+
+# Database REDIS settings
+REDIS_DATABASE_USER=someuser
+REDIS_DATABASE_PASSWORD=someredispass
+REDIS_DATABASE_HOST=redis_cache
+REDIS_DATABASE_PORT=6388
+REDIS_DATABASE_LEVEL=1
+## Redis connection string. Always required
+## redis://REDIS_DATABASE_HOST:REDIS_DATABASE_PORT/REDIS_DATABASE_LEVEL
+REDIS_DSN=redis://localhost:6379/0
+
+
+DATABASE_MODE=postgresql
+
+# Database SQL settings
+POSTGRES_DATABASE_USER=someusername
+POSTGRES_DATABASE_PASSWORD=postgres_pass12345
+POSTGRES_DATABASE_NAME=bot
+POSTGRES_DATABASE_HOST=pg_database
+POSTGRES_DATABASE_PORT=port
+
+## PostgreSQL connection string. Always required
+POSTGRES_DSN=postgresql+asyncpg://POSTGRES_USER:POSTGRES_PASSWORD@POSTGRES_DATABASE_HOST:POSTGRES_DATABASE_PORT/POSTGRES_DATABASE_NAME
+
+
+# Webhooks (optional)
+# You can skip this section if you want to use polling
+## Domain part of your webhook.
+# WEBHOOK_DOMAIN=http://localhost:9000
+## Actual path for your webhook on your domain
+# WEBHOOK_PATH=/bombsweeper/s89ytjr5dh
+
+# App settings (optional)
+# You can skip this section if you want to use polling
+# or if default settings are sufficient.
+# APP_HOST=0.0.0.0
+# APP_PORT=9000
+
+# Using local Bot API server (Optional)
+# You can skip this section if you want to use primary Bot API server
+# CUSTOM_BOT_API=http://localhost:8081
+
+DEBUG=True
