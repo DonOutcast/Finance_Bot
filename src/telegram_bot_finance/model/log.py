@@ -24,7 +24,38 @@ def debugorator(debug_on: bool):
     def decorator(function):
         @functools.wraps(function)
         async def wrapper(*args, **kwargs):
-            result = await function(*args, **kwargs)
+            result = None
+            try:
+                result = await function(*args, **kwargs)
+            except Exception as ex:
+                logger_exception = get_my_logger("logger_exception")
+                logger_exception.exception(f"User id: {args[0].from_user.id}")
+            logger_debug = get_my_logger("logger_info")
+            logger_debug.info(
+                f"Function: {function.__name__}. User id: {args[0].from_user.id}. User name {args[0].from_user.full_name}."
+            )
+            if debug_on:
+                logger_debug = get_my_logger("logger_debug")
+                logger_debug.debug(
+                    f"Function: {function.__name__}. User id: {args[0].from_user.id}. User name {args[0].from_user.full_name}."
+                )
+            return result
+
+        return wrapper
+
+    return decorator
+
+
+def databasorator(debug_on: bool):
+    def decorator(function):
+        @functools.wraps(function)
+        async def wrapper(*args, **kwargs):
+            result = None
+            try:
+                result = await function(*args, **kwargs)
+            except Exception as ex:
+                logger_exception = get_my_logger("logger_exception")
+                logger_exception.exception(f"User id: {args[0].from_user.id}")
             logger_debug = get_my_logger("logger_info")
             logger_debug.info(
                 f"Function: {function.__name__}. User id: {args[0].from_user.id}. User name {args[0].from_user.full_name}."

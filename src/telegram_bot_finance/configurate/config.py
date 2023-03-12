@@ -100,28 +100,48 @@ settings = get_settings()
 LOGGING = {
     "version": 1,
     "formatters": {
-        "primes_formatter": {
+        "debug_formatter": {
             "format": "%(asctime)s - %(name)s - %(levelname)s  - %(message)s - %(filename)s - %(module)s",
             "datefmt": "%Y-%m-%d %H:%M:%S"
         },
-        "main_formatter": {
+        "info_formatter": {
             "format": "%(asctime)s - %(name)s - %(levelname)s  - %(message)s - %(filename)s - %(module)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S"
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "exception_formatter": {
+            "format": "%(asctime)s %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
         }
     },
     "handlers": {
         "debug_handler": {
             "class": "logging.StreamHandler",
-            "formatter": "primes_formatter"
+            "formatter": "debug_formatter"
         },
         "info_handler": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "mode": "a",
-            "filename": "log/logs.log",
+            # "class": "logging.handlers.RotatingFileHandler",
+            # "mode": "a",
+            # "filename": "log/logs.log",
+            # "encoding": "UTF-8",
+            # "maxBytes": 20,
+            # "backupCount": 5,
+            # "formatter": "main_formatter",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "log/file_log.log",
             "encoding": "UTF-8",
-            "maxBytes": 20,
-            "backupCount": 5,
-            "formatter": "main_formatter",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 365,
+            "formatter": "info_formatter",
+        },
+        "exception_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "log/errors_log.log",
+            "encoding": "UTF-8",
+            "when": 'D',
+            "interval": 1,
+            "backupCount": 365,
+            "formatter": "exception_formatter",
         }
     },
     "loggers": {
@@ -129,6 +149,7 @@ LOGGING = {
             "handlers": [
                 "debug_handler"
             ],
+            "propagate": True,
             "level": "DEBUG"
         },
         "logger_info": {
@@ -136,7 +157,14 @@ LOGGING = {
                 "info_handler"
             ],
             "propagate": True,
-            "level": "INFO"
+            "level": "INFO",
+        },
+        "logger_exception": {
+            "handlers": [
+                "exception_handler",
+            ],
+            "propagate": True,
+            "level": "ERROR",
         }
     }
 }
