@@ -38,12 +38,13 @@ class Database:
         )
         return sql, tuple(parameters)
 
-    def init_category(self, codename: str, name: str, is_base: bool, aliases: str):
+    def add_item_to_category(self, codename: str, name: str, is_base: bool, aliases: str):
         sql_query = """
         INSERT INTO category (codename, name, is_base_expense, aliases) VALUES (?, ?, ?, ?)
         """
         parameters = (codename, name, is_base, aliases)
         self._execute(sql=sql_query, parameters=parameters, commit=True)
+
     def crete_table_budget(self):
         sql_query = """
         CREATE TABLE IF NOT EXISTS budget (
@@ -79,8 +80,6 @@ class Database:
         );
         """
 
-
-
     def init_budget(self):
         sql_query = """
         """
@@ -105,7 +104,19 @@ if __name__ == "__main__":
     test_db = Database()
     test_db.drop_tables_all()
     test_db.create_table_category()
-    test_db.init_category("products", "продукты", True, "еда")
+    test_db.add_item_to_category("products", "продукты", True, "напитки")
+    test_db.add_item_to_category("coffe", " кофе", True, "напитки")
+    test_db.add_item_to_category("dinner", "обед", True, "столовая, бизнес-ланч")
+    test_db.add_item_to_category("cafe", "кафе", True,
+                                 "ресторан, рест, мак, макдональдс, макдак, kfc, ilpatio, il patio"),
+    test_db.add_item_to_category("transport", "общ. транспорт", False, "метро, автобус, metro"),
+    test_db.add_item_to_category("taxi", "такси", False, "яндекс такси, yandex taxi"),
+    test_db.add_item_to_category("phone", "телефон", False, "теле2, связь"),
+    test_db.add_item_to_category("books", "книги", False, "литература, литра, лит-ра"),
+    test_db.add_item_to_category("internet", "интернет", False, "инет, inet"),
+    test_db.add_item_to_category("subscriptions", "подписки", False, "подписка"),
+    test_db.add_item_to_category("other", "прочее", True, "")
+
     # test_db.crete_table_budget()
     # test_db.create_table_category()
     # test_db.drop_tables_all()

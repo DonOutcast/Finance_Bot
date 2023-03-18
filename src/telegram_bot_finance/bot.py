@@ -7,6 +7,8 @@ from configurate.config import settings, Settings
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram import exceptions
+from aiogram.types import BotCommand, BotCommandScopeDefault, BotCommandScopeAllGroupChats
+from aiogram.exceptions import TelegramAPIError
 
 from model.middlewares.config import ConfigMiddleware
 from model.middlewares.chataction import ChatActionMiddleware
@@ -14,6 +16,10 @@ from model.services import broadcaster
 
 bot = Bot(settings.bot_token.get_secret_value(), parse_mode="HTML")
 storage = MemoryStorage
+
+
+# bot = bot.get_current()
+
 
 
 # @user_router.message(Command("start"))
@@ -47,8 +53,8 @@ async def main():
     for router in [admin_router, user_router, echo_router]:
         dp.include_router(router)
     register_global_middlewares(dp, settings)
+    await set_default_commands(bot)
     try:
-        print("run!")
         # await bot.send_message(chat_id=1134902789, text="Оставь да", disable_notification=False)
         await on_startup(bot, settings.admins)
         await bot.delete_webhook(drop_pending_updates=True)

@@ -2,6 +2,7 @@ from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram import exceptions
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import BotCommandScopeDefault
 
 from configurate.config import settings
 
@@ -14,6 +15,8 @@ from model.middlewares.throttling import ThrottlingMiddelware
 from model.middlewares.chataction import ChatActionMiddleware
 
 from model.services import broadcaster
+
+from model.commnad_scope.scopes import set_default_commands
 
 
 # from model.handlers.echo import echo_router
@@ -46,7 +49,12 @@ class Controller(object):
             self.dp.include_router(router)
         self._register_global_middlewares(settings)
         try:
-            print("run!")
+            await set_default_commands(self.bot)
+            # print(BotCommandScopeDefault().type)
+            bot_commands = await self.bot.get_my_commands()
+            for command in bot_commands:
+                print(*command)
+                # print(command.command, "-", command.description, "-", command.)
             await self._on_startup(settings.admins)
             await self.bot.delete_webhook(drop_pending_updates=True)
             await self.dp.start_polling(self.bot, allowed_updates=self.dp.resolve_used_update_types())
