@@ -1,11 +1,13 @@
 import os
 import sqlite3
+from typing import List
+from configurate.config import DATABASE_DIR
 from model.errors.exception import SqlErrorsDecorator
 
 
 class Database:
 
-    def __init__(self, path_to_db="database.db"):
+    def __init__(self, path_to_db=DATABASE_DIR):
         self.path_to_db = path_to_db
 
     @property
@@ -16,6 +18,7 @@ class Database:
     # @my_decorator
     def _execute(self, sql: str, parameters: tuple = (), fetchone=False,
                  fetchall=False, commit=False):
+
         connection = self.connection
         cursor = connection.cursor()
         cursor.execute(sql, parameters)
@@ -85,6 +88,22 @@ class Database:
         """
         self._execute(sql=sql_query, commit=True)
 
+    def select_from_table(self, table: str, columns: List[str]):
+        columns_joined = ', '.join(columns)
+        sql_query = f"SELECT {columns_joined} FROM {table}"
+        result = self._execute(sql=sql_query, fetchall=True)
+        result = self.get_column_name_with_values(result, columns)
+        return result
+
+    def get_column_name_with_values(self, sql_data: List[tuple], columns: List[str]):
+        result = []
+        for row in sql_data:
+            dict_row = {}
+            for index, column in enumerate(columns):
+                dict_row[column] = row[index]
+            result.append(dict_row)
+        return result
+
     def drop_tables_all(self):
         sql_query = """
         DROP TABLE IF EXISTS budget;
@@ -100,23 +119,22 @@ class Database:
         self._execute(sql=sql_query_2, commit=True)
 
 
-if __name__ == "__main__":
-    test_db = Database()
-    test_db.drop_tables_all()
-    test_db.create_table_category()
-    test_db.add_item_to_category("products", "продукты", True, "напитки")
-    test_db.add_item_to_category("coffe", " кофе", True, "напитки")
-    test_db.add_item_to_category("dinner", "обед", True, "столовая, бизнес-ланч")
-    test_db.add_item_to_category("cafe", "кафе", True,
-                                 "ресторан, рест, мак, макдональдс, макдак, kfc, ilpatio, il patio"),
-    test_db.add_item_to_category("transport", "общ. транспорт", False, "метро, автобус, metro"),
-    test_db.add_item_to_category("taxi", "такси", False, "яндекс такси, yandex taxi"),
-    test_db.add_item_to_category("phone", "телефон", False, "теле2, связь"),
-    test_db.add_item_to_category("books", "книги", False, "литература, литра, лит-ра"),
-    test_db.add_item_to_category("internet", "интернет", False, "инет, inet"),
-    test_db.add_item_to_category("subscriptions", "подписки", False, "подписка"),
-    test_db.add_item_to_category("other", "прочее", True, "")
-
-    # test_db.crete_table_budget()
-    # test_db.create_table_category()
-    # test_db.drop_tables_all()
+test_db = Database()
+test_db.drop_tables_all()
+test_db.create_table_category()
+test_db.add_item_to_category("products", "продукты", True, "напитки")
+test_db.add_item_to_category("coffe", " кофе", True, "напитки")
+test_db.add_item_to_category("dinner", "обед", True, "столовая, бизнес-ланч")
+test_db.add_item_to_category("cafe", "кафе", True,
+                             "ресторан, рест, мак, макдональдс, макдак, kfc, ilpatio, il patio"),
+test_db.add_item_to_category("transport", "общ. транспорт", False, "метро, автобус, metro"),
+test_db.add_item_to_category("taxi", "такси", False, "яндекс такси, yandex taxi"),
+test_db.add_item_to_category("phone", "телефон", False, "теле2, связь"),
+test_db.add_item_to_category("books", "книги", False, "литература, литра, лит-ра"),
+test_db.add_item_to_category("internet", "интернет", False, "инет, inet"),
+test_db.add_item_to_category("subscriptions", "подписки", False, "подписка"),
+test_db.add_item_to_category("other", "прочее", True, "")
+# test_db.select_from_table("category", "codename name is_base_expense aliases".split())
+# test_db.crete_table_budget()
+# test_db.create_table_category()
+# test_db.drop_tables_all()

@@ -16,6 +16,7 @@ TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 BASE_DIR = Path(__file__).absolute().parent.parent
 # SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
 TEMPLATES_DIR = BASE_DIR / "templates"
+DATABASE_DIR = BASE_DIR / "databases/database.db"
 CONFIGURATE_DIR = BASE_DIR / "configurate/log_config.json"
 
 

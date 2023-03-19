@@ -2,7 +2,7 @@ from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram import exceptions
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import BotCommandScopeDefault
+from aiogram.types import BotCommandScopeDefault, MenuButtonWebApp, WebAppInfo
 
 from configurate.config import settings
 
@@ -16,7 +16,8 @@ from model.middlewares.chataction import ChatActionMiddleware
 
 from model.services import broadcaster
 
-from model.commnad_scope.scopes import set_default_commands
+
+from model.commnad_scope.scopes import SetCommands, default_commands
 
 
 # from model.handlers.echo import echo_router
@@ -49,8 +50,15 @@ class Controller(object):
             self.dp.include_router(router)
         self._register_global_middlewares(settings)
         try:
-            await set_default_commands(self.bot)
-            # print(BotCommandScopeDefault().type)
+            # await self.bot.set_chat_menu_button(
+            #     menu_button=MenuButtonWebApp(
+            #         type="web_app", text="Открыть веб приложение",
+            #         web_app=WebAppInfo(url="https://github.com/DonOutcast/Donbook.github.io"))
+            # )
+            await self.bot.delete_webhook()
+            await self.bot.delete_my_commands()
+            # await SetCommands(self.bot).set_default_commands()
+            # await default_commands(self.bot)
             bot_commands = await self.bot.get_my_commands()
             for command in bot_commands:
                 print(*command)

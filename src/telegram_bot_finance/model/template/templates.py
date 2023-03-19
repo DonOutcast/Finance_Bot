@@ -19,6 +19,7 @@ class RenderTemplate:
         rendered = re.sub(" +", " ", rendered).replace(" .", ".").replace(" ,", ",")
         rendered = "\n".join(line.strip() for line in rendered.split("\n"))
         rendered = rendered.replace("{FOURPACES}", "    ")
+        rendered = rendered.replace("{ONE_SPACE}", " ")
         return rendered
 
     def __get_template_env(self):
