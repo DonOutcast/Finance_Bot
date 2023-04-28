@@ -45,3 +45,7 @@ def logger(statement):
 # def x_and_y(x: int, y: int) -> int:
 #     """Hello, world!"""
 #     print(x + y)
+
+class NotCorrectMessage(Exception):
+    """Некорректное сообщение в бот, которое не удалось распарсить"""
+    pass

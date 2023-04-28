@@ -2,9 +2,9 @@ from controller.controller import Controller
 import asyncio
 
 if __name__ == "__main__":
-    s = Controller()
-    asyncio.run(s.main())
-
+    # s = Controller()
+    # asyncio.run(s.main())
+    print(f'You chose "{1}" as a language to translate "{1}".')
 # import time
 # import logging
 # import logging.handlers
